@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+@model List<Wedding>
+<h1>Welcome to the Wedding Planner</h1>
+<a href="create">New Wedding</a> | <a href="logout">Logout</a>
+<table class="table table_striped">
+    <thead>
+        <tr>
+            <th>Wedding</th>
+            <th>Date/Time</th>
+            <th>Guest</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var w in Model)
+        {
+            <tr>
+                <td> <a href="detail/@w.WeddingId">@w.WedderOne and @w.WedderTwo </a></td>
+                <td>@w.Date</td>
+                <td>@w.MyGuests.Count</td>
+                <td>
+                    @if(w.Creater.PlannerId == ViewBag.Planner.PlannerId)
+                    {
+                        <a href="/delete/@w.WeddingId">Delete</a>
+                    }
+                    else
+                    {
+                        @if(w.MyGuests.All(m => m.PlannerId != ViewBag.Planner.PlannerId))
+                        {
+                            <a href="/join/@w.WeddingId/@ViewBag.Planner.PlannerId">RSVP</a>
+                        }
+                        @if(w.MyGuests.Any(m => m.PlannerId == ViewBag.Planner.PlannerId))
+                        {
+                            <a href="/cancel/@w.WeddingId/@ViewBag.Planner.PlannerId">Un-RSVP</a>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
